@@ -53,17 +53,6 @@ app.use(
 // parse requests of content-type - application/json
 app.use(express.json({ extended: true }));
 
-if (process.env.NODE_ENV === 'production') {
-  const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-  app.get('*', (req, res) =>
-    res.sendFile(
-      path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
-    )
-  );
-}
-
 /* Routes */
 app.use(
   '/api/role-permission',
@@ -127,4 +116,16 @@ app.use(
   '/api/awardHistory',
   require('./routes/hr/awardHistory/awardHistory.routes')
 );
+
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  app.get('*', (req, res) =>
+    res.sendFile(
+      path.resolve(__dirname, '..', 'frontend', 'build', 'index.html')
+    )
+  );
+}
+
 module.exports = app;
