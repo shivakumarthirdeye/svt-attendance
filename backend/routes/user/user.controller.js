@@ -1,18 +1,18 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-require("dotenv").config();
+require('dotenv').config();
 
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
 
 const login = async (req, res) => {
   try {
     const allUser = await prisma.user.findMany();
     const user = allUser.find(
-      (u) =>
+      u =>
         u.userName === req.body.userName &&
         bcrypt.compareSync(req.body.password, u.password)
     );
@@ -31,7 +31,7 @@ const login = async (req, res) => {
     });
     // store all permissions name to an array
     const permissionNames = permissions.rolePermission.map(
-      (rp) => rp.permission.name
+      rp => rp.permission.name
     );
 
     if (user) {
@@ -39,7 +39,7 @@ const login = async (req, res) => {
         { sub: user.id, permissions: permissionNames },
         secret,
         {
-          expiresIn: "24h",
+          expiresIn: '24h',
         }
       );
       const { password, ...userWithoutPassword } = user;
@@ -50,7 +50,7 @@ const login = async (req, res) => {
     }
     return res
       .status(400)
-      .json({ message: "userName or password is incorrect" });
+      .json({ message: 'userName or password is incorrect' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -82,6 +82,7 @@ const register = async (req, res) => {
         image: req.body.image,
         employmentStatusId: req.body.employmentStatusId,
         departmentId: req.body.departmentId,
+        branchId: req.body.branchId,
         roleId: req.body.roleId,
         shiftId: req.body.shiftId,
         leavePolicyId: req.body.leavePolicyId,
@@ -103,7 +104,7 @@ const register = async (req, res) => {
           },
         },
         educations: {
-          create: req.body.educations.map((e) => {
+          create: req.body.educations.map(e => {
             return {
               degree: e.degree,
               institution: e.institution,
@@ -124,7 +125,7 @@ const register = async (req, res) => {
 };
 
 const getAllUser = async (req, res) => {
-  if (req.query.query === "all") {
+  if (req.query.query === 'all') {
     try {
       const allUser = await prisma.user.findMany({
         include: {
@@ -146,7 +147,7 @@ const getAllUser = async (req, res) => {
       });
       return res.status(200).json(
         allUser
-          .map((u) => {
+          .map(u => {
             const { password, ...userWithoutPassword } = u;
             return userWithoutPassword;
           })
@@ -155,7 +156,7 @@ const getAllUser = async (req, res) => {
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
-  } else if (req.query.status === "false") {
+  } else if (req.query.status === 'false') {
     try {
       const allUser = await prisma.user.findMany({
         where: {
@@ -180,7 +181,7 @@ const getAllUser = async (req, res) => {
       });
       return res.status(200).json(
         allUser
-          .map((u) => {
+          .map(u => {
             const { password, ...userWithoutPassword } = u;
             return userWithoutPassword;
           })
@@ -214,7 +215,7 @@ const getAllUser = async (req, res) => {
       });
       return res.status(200).json(
         allUser
-          .map((u) => {
+          .map(u => {
             const { password, ...userWithoutPassword } = u;
             return userWithoutPassword;
           })
@@ -241,6 +242,7 @@ const getSingleUser = async (req, res) => {
       educations: true,
       employmentStatus: true,
       department: true,
+      branch: true,
       role: true,
       shift: true,
       leavePolicy: true,
@@ -252,13 +254,13 @@ const getSingleUser = async (req, res) => {
       },
       leaveApplication: {
         orderBy: {
-          id: "desc",
+          id: 'desc',
         },
         take: 5,
       },
       attendance: {
         orderBy: {
-          id: "desc",
+          id: 'desc',
         },
         take: 1,
       },
@@ -269,7 +271,7 @@ const getSingleUser = async (req, res) => {
   const leaveDays = await prisma.leaveApplication.findMany({
     where: {
       userId: Number(req.params.id),
-      status: "ACCEPTED",
+      status: 'ACCEPTED',
       acceptLeaveFrom: {
         gte: new Date(new Date().getFullYear(), 0, 1),
       },
@@ -279,12 +281,12 @@ const getSingleUser = async (req, res) => {
     },
   });
   const paidLeaveDays = leaveDays
-    .filter((l) => l.leaveType === "PAID")
+    .filter(l => l.leaveType === 'PAID')
     .reduce((acc, item) => {
       return acc + item.leaveDuration;
     }, 0);
   const unpaidLeaveDays = leaveDays
-    .filter((l) => l.leaveType === "UNPAID")
+    .filter(l => l.leaveType === 'UNPAID')
     .reduce((acc, item) => {
       return acc + item.leaveDuration;
     }, 0);
@@ -297,10 +299,10 @@ const getSingleUser = async (req, res) => {
     singleUser.leavePolicy.unpaidLeaveCount - unpaidLeaveDays;
   const id = parseInt(req.params.id);
   // only allow admins and owner to access other user records. use truth table to understand the logic
-  if (id !== req.auth.sub && !req.auth.permissions.includes("read-user")) {
+  if (id !== req.auth.sub && !req.auth.permissions.includes('read-user')) {
     return res
       .status(401)
-      .json({ message: "Unauthorized. You are not an admin" });
+      .json({ message: 'Unauthorized. You are not an admin' });
   }
 
   if (!singleUser) return;
@@ -312,14 +314,14 @@ const updateSingleUser = async (req, res) => {
   const id = parseInt(req.params.id);
   // only allow admins and owner to edit other user records. use truth table to understand the logic
 
-  if (id !== req.auth.sub && !req.auth.permissions.includes("update-user")) {
+  if (id !== req.auth.sub && !req.auth.permissions.includes('update-user')) {
     return res.status(401).json({
-      message: "Unauthorized. You can only edit your own record.",
+      message: 'Unauthorized. You can only edit your own record.',
     });
   }
   try {
     // admin can change all fields
-    if (req.auth.permissions.includes("update-user")) {
+    if (req.auth.permissions.includes('update-user')) {
       const hash = await bcrypt.hash(req.body.password, saltRounds);
       const join_date = new Date(req.body.joinDate);
       const leave_date = new Date(req.body.leaveDate);
@@ -377,10 +379,10 @@ const updateSingleUser = async (req, res) => {
 const deleteSingleUser = async (req, res) => {
   // const id = parseInt(req.params.id);
   // only allow admins to delete other user records
-  if (!req.auth.permissions.includes("delete-user")) {
+  if (!req.auth.permissions.includes('delete-user')) {
     return res
       .status(401)
-      .json({ message: "Unauthorized. Only admin can delete." });
+      .json({ message: 'Unauthorized. Only admin can delete.' });
   }
   try {
     const deleteUser = await prisma.user.update({
@@ -391,7 +393,7 @@ const deleteSingleUser = async (req, res) => {
         status: req.body.status,
       },
     });
-    return res.status(200).json({ message: "User deleted successfully" });
+    return res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

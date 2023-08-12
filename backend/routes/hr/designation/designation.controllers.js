@@ -1,9 +1,9 @@
-const { getPagination } = require("../../../utils/query");
-const { PrismaClient } = require("@prisma/client");
+const { getPagination } = require('../../../utils/query');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const createSingleDesignation = async (req, res) => {
-  if (req.query.query === "deletemany") {
+  if (req.query.query === 'deletemany') {
     try {
       // delete many designation at once
       const deletedDesignation = await prisma.designation.deleteMany({
@@ -15,13 +15,13 @@ const createSingleDesignation = async (req, res) => {
       });
 
       if (!deletedDesignation) {
-        return res.status(404).json({ message: "Designation not deleted" });
+        return res.status(404).json({ message: 'Designation not deleted' });
       }
       return res.status(200).json(deletedDesignation);
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
-  } else if (req.query.query === "createmany") {
+  } else if (req.query.query === 'createmany') {
     try {
       // create many designation from an array of objects
       const createdDesignation = await prisma.designation.createMany({
@@ -30,7 +30,7 @@ const createSingleDesignation = async (req, res) => {
       });
 
       if (!createdDesignation) {
-        return res.status(404).json({ message: "Designation not created" });
+        return res.status(404).json({ message: 'Designation not created' });
       }
       return res.status(201).json(createdDesignation);
     } catch (error) {
@@ -46,7 +46,7 @@ const createSingleDesignation = async (req, res) => {
       });
 
       if (!createdDesignation) {
-        return res.status(404).json({ message: "Designation not created" });
+        return res.status(404).json({ message: 'Designation not created' });
       }
       return res.status(201).json(createdDesignation);
     } catch (error) {
@@ -56,12 +56,12 @@ const createSingleDesignation = async (req, res) => {
 };
 
 const getAllDesignation = async (req, res) => {
-  if (req.query.query === "all") {
+  if (req.query.query === 'all') {
     try {
       // get all designation
       const allDesignation = await prisma.designation.findMany({
         orderBy: {
-          id: "asc",
+          id: 'asc',
         },
       });
       return res.status(200).json(allDesignation);
@@ -74,7 +74,7 @@ const getAllDesignation = async (req, res) => {
       // get all designation paginated
       const allDesignation = await prisma.designation.findMany({
         orderBy: {
-          id: "asc",
+          id: 'asc',
         },
         skip: parseInt(skip),
         take: parseInt(limit),
@@ -108,7 +108,7 @@ const getSingleDesignation = async (req, res) => {
     });
 
     if (!singleDesignation) {
-      return res.status(404).json({ message: "Designation not found" });
+      return res.status(404).json({ message: 'Designation not found' });
     }
     return res.status(200).json(singleDesignation);
   } catch (error) {
@@ -128,7 +128,7 @@ const updateSingleDesignation = async (req, res) => {
     });
 
     if (!updatedDesignation) {
-      return res.status(404).json({ message: "Designation not updated" });
+      return res.status(404).json({ message: 'Designation not updated' });
     }
     return res.status(200).json(updatedDesignation);
   } catch (error) {
@@ -154,17 +154,17 @@ const allDesignationWiseEmployee = async (req, res) => {
             },
           },
           orderBy: {
-            id: "desc",
+            id: 'desc',
           },
           take: 1,
         },
       },
     });
 
-    const data = designationWiseEmployee.map((item) => {
+    const data = designationWiseEmployee.map(item => {
       return {
-        designationId: item.designationHistory[0].designation.id,
-        designationName: item.designationHistory[0].designation.name,
+        designationId: item.designationHistory[0]?.designation.id,
+        designationName: item.designationHistory[0]?.designation.name,
         employee: [
           {
             id: item.id,
@@ -176,9 +176,7 @@ const allDesignationWiseEmployee = async (req, res) => {
     });
 
     const result = data.reduce((acc, current) => {
-      const x = acc.find(
-        (item) => item.designationId === current.designationId
-      );
+      const x = acc.find(item => item.designationId === current.designationId);
       if (!x) {
         return acc.concat([current]);
       } else {
@@ -190,12 +188,12 @@ const allDesignationWiseEmployee = async (req, res) => {
     // get all designation and map it with the result
     const allDesignation = await prisma.designation.findMany({
       orderBy: {
-        id: "asc",
+        id: 'asc',
       },
     });
 
-    const finalResult = allDesignation.map((item) => {
-      const x = result.find((i) => i.designationId === item.id);
+    const finalResult = allDesignation.map(item => {
+      const x = result.find(i => i.designationId === item.id);
       if (!x) {
         return {
           designationId: item.id,
@@ -230,17 +228,17 @@ const singleDesignationWiseEmployee = async (req, res) => {
             },
           },
           orderBy: {
-            id: "desc",
+            id: 'desc',
           },
           take: 1,
         },
       },
     });
 
-    const data = designationWiseEmployee.map((item) => {
+    const data = designationWiseEmployee.map(item => {
       return {
-        designationId: item.designationHistory[0].designation.id,
-        designationName: item.designationHistory[0].designation.name,
+        designationId: item.designationHistory[0]?.designation.id,
+        designationName: item.designationHistory[0]?.designation.name,
         employee: [
           {
             id: item.id,
@@ -252,9 +250,7 @@ const singleDesignationWiseEmployee = async (req, res) => {
     });
 
     const result = data.reduce((acc, current) => {
-      const x = acc.find(
-        (item) => item.designationId === current.designationId
-      );
+      const x = acc.find(item => item.designationId === current.designationId);
       if (!x) {
         return acc.concat([current]);
       } else {
@@ -266,12 +262,12 @@ const singleDesignationWiseEmployee = async (req, res) => {
     // get all designation and map it with the result
     const allDesignation = await prisma.designation.findMany({
       orderBy: {
-        id: "asc",
+        id: 'asc',
       },
     });
 
-    const finalResult = allDesignation.map((item) => {
-      const x = result.find((i) => i.designationId === item.id);
+    const finalResult = allDesignation.map(item => {
+      const x = result.find(i => i.designationId === item.id);
       if (!x) {
         return {
           designationId: item.id,
@@ -284,7 +280,7 @@ const singleDesignationWiseEmployee = async (req, res) => {
     });
 
     const singleDesignation = finalResult.find(
-      (item) => item.designationId === parseInt(req.params.id)
+      item => item.designationId === parseInt(req.params.id)
     );
 
     return res.status(200).json(singleDesignation);
@@ -302,7 +298,7 @@ const deleteSingleDesignation = async (req, res) => {
     });
 
     if (!deletedDesignation) {
-      return res.status(404).json({ message: "Designation delete to failed" });
+      return res.status(404).json({ message: 'Designation delete to failed' });
     }
     return res.status(200).json(deletedDesignation);
   } catch (error) {

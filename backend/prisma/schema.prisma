@@ -32,14 +32,17 @@ model user {
   employmentStatusId Int?
   department         department?       @relation(fields: [departmentId], references: [id])
   departmentId       Int?
-  role               role?             @relation(fields: [roleId], references: [id])
-  roleId             Int?
-  shift              shift?            @relation(fields: [shiftId], references: [id])
-  shiftId            Int?
-  leavePolicy        leavePolicy?      @relation(fields: [leavePolicyId], references: [id])
-  leavePolicyId      Int?
-  weeklyHoliday      weeklyHoliday?    @relation(fields: [weeklyHolidayId], references: [id])
-  weeklyHolidayId    Int?
+  branch             branch?           @relation(fields: [branchId], references: [id])
+  branchId           Int?
+
+  role            role?          @relation(fields: [roleId], references: [id])
+  roleId          Int?
+  shift           shift?         @relation(fields: [shiftId], references: [id])
+  shiftId         Int?
+  leavePolicy     leavePolicy?   @relation(fields: [leavePolicyId], references: [id])
+  leavePolicyId   Int?
+  weeklyHoliday   weeklyHoliday? @relation(fields: [weeklyHolidayId], references: [id])
+  weeklyHolidayId Int?
 
   attendance         attendance[]
   leaveApplication   leaveApplication[]
@@ -96,6 +99,13 @@ model designation {
 }
 
 model department {
+  id     Int     @id @default(autoincrement())
+  name   String
+  status Boolean @default(true)
+  user   user[]
+}
+
+model branch {
   id     Int     @id @default(autoincrement())
   name   String
   status Boolean @default(true)

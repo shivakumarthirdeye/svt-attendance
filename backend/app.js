@@ -73,6 +73,7 @@ app.use('/api/account', require('./routes/accounting/account/account.routes'));
 app.use('/api/setting', require('./routes/setting/setting.routes'));
 app.use('/api/email', require('./routes/email/email.routes'));
 app.use('/api/department', require('./routes/hr/department/department.routes'));
+app.use('/api/branch', require('./routes/hr/branch/branch.routes'));
 app.use(
   '/api/employment-status',
   require('./routes/hr/employmentStatus/employmentStatus.routes')
