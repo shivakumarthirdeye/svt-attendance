@@ -16,6 +16,7 @@ model user {
   password   String
   email      String?   @unique
   phone      String?   @unique
+  gender     String?
   // address
   street     String?
   city       String?

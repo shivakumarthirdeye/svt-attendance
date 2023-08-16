@@ -9,14 +9,14 @@ import Loader from '../loader/loader';
 import PageTitle from '../page-header/PageHeader';
 import BtnEditSvg from '../UI/Button/btnEditSvg';
 import BtnDeleteSvg from '../UI/Button/btnDeleteSvg';
-import { loadSingleBranch, loadSingleRole } from './BranchApis';
+import { deleteBranch, loadSingleBranch, loadSingleRole } from './BranchApis';
 
 import ColVisibilityDropdown from '../Shared/ColVisibilityDropdown';
 import { CsvLinkBtn } from '../UI/CsvLinkBtn';
 import { CSVLink } from 'react-csv';
 import ViewBtn from '../Buttons/ViewBtn';
 import moment from 'moment';
-import DepartmentEditPopup from '../UI/PopUp/DepartmentEditPopup';
+import BranchEditPopup from '../UI/PopUp/BranchEditPopup';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
 
 //PopUp
@@ -125,13 +125,14 @@ const DetailBranch = () => {
 
   //dispatch
   const dispatch = useDispatch();
-  const [department, setDepartment] = useState(null);
+  const [branch, setBranch] = useState(null);
   //Delete Supplier
-  const onDelete = () => {
+  const onDelete = async () => {
     try {
-      setVisible(false);
-      toast.warning(`department Name : ${department.rolename} is removed `);
-      return navigate('/admin/dashboard');
+      await deleteBranch(branch.id);
+      // setVisible(false);
+      toast.warning(`department Name : ${branch.name} is removed `);
+      return navigate('/admin/branch');
     } catch (error) {
       console.log(error.message);
     }
@@ -144,7 +145,7 @@ const DetailBranch = () => {
   };
 
   useEffect(() => {
-    loadSingleBranch(id).then(d => setDepartment(d.data));
+    loadSingleBranch(id).then(d => setBranch(d.data));
   }, [id]);
 
   const isLogged = Boolean(localStorage.getItem('isLogged'));
@@ -159,21 +160,26 @@ const DetailBranch = () => {
 
       <UserPrivateComponent permission={'read-department'}>
         <Card className='mr-top mt-5'>
-          {department ? (
-            <Fragment key={department.id}>
+          {branch ? (
+            <Fragment key={branch.id}>
               <div>
                 <div className='flex justify-between '>
                   <h3 className={'text-xl'}>
-                    ID : {department.id} | {department.name}
+                    ID : {branch.id} | {branch.name}
                   </h3>
                   <UserPrivateComponent permission={'update-department'}>
-                    <div className='flex justify-end'>
-                      <DepartmentEditPopup data={department} />
+                    <div className='flex justify-end items-center'>
+                      <BranchEditPopup data={branch} />
                       <Popover
                         className='m-2'
                         content={
                           <a onClick={onDelete}>
-                            <Button disabled={true} type='primary' danger>
+                            <Button
+                              // disabled={true}
+                              type='primary'
+                              danger
+                              className='text-white'
+                            >
                               Yes Please !
                             </Button>
                           </a>
@@ -183,14 +189,14 @@ const DetailBranch = () => {
                         visible={visible}
                         onVisibleChange={handleVisibleChange}
                       >
-                        <button disabled={true}>
+                        <button className='mt-[2.2px]'>
                           <BtnDeleteSvg size={30} />
                         </button>
                       </Popover>
                     </div>
                   </UserPrivateComponent>
                 </div>
-                <CustomTable list={department.user} />
+                <CustomTable list={branch.user} />
               </div>
             </Fragment>
           ) : (

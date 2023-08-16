@@ -119,6 +119,7 @@ const AddUser = () => {
   };
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']; // blood groups
+  const genders = ['Male', 'Female', 'Other']; // blood groups
 
   return (
     <Fragment bordered={false}>
@@ -217,6 +218,33 @@ const AddUser = () => {
                   ]}
                 >
                   <Input placeholder='johndoe2@example.com' />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Gender'
+                  name='gender'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input Gender!',
+                    },
+                  ]}
+                >
+                  <Select
+                    placeholder='Select Gender'
+                    allowClear
+                    mode='single'
+                    size='middle'
+                    style={{
+                      width: '100%',
+                    }}
+                  >
+                    {genders.map(gender => (
+                      <Option key={gender} value={gender}>
+                        {gender}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={12} className='gutter-row'>

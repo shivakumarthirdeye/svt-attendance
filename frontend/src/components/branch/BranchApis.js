@@ -58,7 +58,7 @@ export const loadSingleBranch = async id => {
 
 // Update Department
 
-export const updateDepartment = async (id, values) => {
+export const updateBranch = async (id, values) => {
   try {
     const { data } = await axios({
       method: 'put',
@@ -66,7 +66,7 @@ export const updateDepartment = async (id, values) => {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      url: `department/${id}`,
+      url: `branch/${id}`,
       data: {
         ...values,
       },
@@ -90,15 +90,15 @@ export const updateDepartment = async (id, values) => {
 
 // Delete Department
 
-export const deleteDepartment = async id => {
+export const deleteBranch = async id => {
   try {
     const { data } = await axios({
-      method: 'patch',
+      method: 'delete',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      url: `department/${id}`,
+      url: `branch/${id}`,
     });
     //dispatching data
     toast.success('Deleted successful');

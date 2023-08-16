@@ -187,7 +187,7 @@ const getSingleBranch = async (req, res) => {
 
 const updateSingleBranch = async (req, res) => {
   try {
-    const updatedBranch = await prisma.Branch.update({
+    const updatedBranch = await prisma.branch.update({
       where: {
         id: Number(req.params.id),
       },
@@ -203,12 +203,9 @@ const updateSingleBranch = async (req, res) => {
 
 const deletedBranch = async (req, res) => {
   try {
-    const deletedBranch = await prisma.Branch.update({
+    const deletedBranch = await prisma.branch.delete({
       where: {
         id: Number(req.params.id),
-      },
-      data: {
-        status: req.body.status,
       },
     });
     return res.status(200).json(deletedBranch);

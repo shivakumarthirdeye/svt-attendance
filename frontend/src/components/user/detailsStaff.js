@@ -9,6 +9,8 @@ import {
   ClockCircleOutlined,
   HomeOutlined,
 } from '@ant-design/icons';
+
+import { FaMale, FaFemale } from 'react-icons/fa';
 import { Col, Row, Alert } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -230,6 +232,18 @@ const DetailStaff = () => {
 
                 <div className='m-5'>
                   <ul className='space-y-4'>
+                    <li className='flex items-center'>
+                      {user?.gender === 'Male' ? (
+                        <FaMale className='mr-3' style={{ fontSize: '15px' }} />
+                      ) : (
+                        <FaFemale
+                          className='mr-3'
+                          style={{ fontSize: '15px' }}
+                        />
+                      )}
+                      <span className='txt-color-2 font-medium'>Gender:</span>
+                      <p className='txt-color-secondary ml-2'>{user?.gender}</p>
+                    </li>
                     <li className='flex items-center'>
                       <TeamOutlined
                         className='mr-3'

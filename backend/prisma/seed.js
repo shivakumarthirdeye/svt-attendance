@@ -253,6 +253,7 @@ async function main() {
       firstName: 'omega',
       lastName: 'solution',
       userName: 'admin',
+      gender: 'Male',
       password: adminHash,
       employmentStatusId: 1,
       departmentId: 1,
