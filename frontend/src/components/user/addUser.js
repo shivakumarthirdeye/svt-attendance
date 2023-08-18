@@ -120,6 +120,7 @@ const AddUser = () => {
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']; // blood groups
   const genders = ['Male', 'Female', 'Other']; // blood groups
+  const attendanceLocation = ['Office', 'Field']; // blood groups
 
   return (
     <Fragment bordered={false}>
@@ -535,6 +536,34 @@ const AddUser = () => {
                       ))}
                   </Select>
                 </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Attendance location'
+                  name='attendanceLocation'
+                >
+                  <Select
+                    placeholder='Select Attendance location'
+                    allowClear
+                    mode='single'
+                    size='middle'
+                    style={{
+                      width: '100%',
+                    }}
+                  >
+                    {attendanceLocation.map(gender => (
+                      <Option key={gender} value={gender}>
+                        {gender}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Biometric/IP address'
+                  name='biometricIP'
+                >
+                  <Input />
+                </Form.Item>
 
                 <Form.Item
                   rules={[
@@ -657,6 +686,97 @@ const AddUser = () => {
                   style={{ marginBottom: '10px' }}
                   label='Salary Comment'
                   name='salaryComment'
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row
+              gutter={{
+                xs: 8,
+                sm: 16,
+                md: 24,
+                lg: 32,
+              }}
+            >
+              <Col span={12} className='gutter-row'>
+                <h2 className='text-center text-xl mt-3 mb-3 txt-color'>
+                  {' '}
+                  Bank account details{' '}
+                </h2>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Bank name*'
+                  name='bankName'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Account number*'
+                  name='accountNumber'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='IFSC code*'
+                  name='ifsc'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Account holder’s name*'
+                  name='accountHolderName'
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12} className='gutter-row'>
+                <h2 className='text-center text-xl mt-3 mb-3 txt-color'>
+                  Additional information
+                </h2>
+
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Employee date of birth'
+                  name='dateOfBirth'
+                >
+                  <DatePicker className='date-picker dateOfBirth' />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='Aadhar number'
+                  name='aadharNumber'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='UAN'
+                  name='UAN'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='PAN'
+                  name='PAN'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='PF no'
+                  name='PFNo'
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: '10px' }}
+                  label='ESI no :'
+                  name='ESINo'
                 >
                   <Input />
                 </Form.Item>

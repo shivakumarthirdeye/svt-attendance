@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const jwt = require('jsonwebtoken');
+const pick = require('../../utils/pick');
 const secret = process.env.JWT_SECRET;
 
 const login = async (req, res) => {
@@ -80,6 +81,19 @@ const register = async (req, res) => {
         leaveDate: leave_date,
         employeeId: req.body.employeeId,
         bloodGroup: req.body.bloodGroup,
+        // BANK
+        bankName: req.body.bankName,
+        accountNumber: req.body.accountNumber,
+        ifsc: req.body.ifsc,
+        accountHolderName: req.body.accountHolderName,
+        // Additional
+        dateOfBirth: req.dateOfBirth,
+        aadharNumber: req.aadharNumber,
+        UAN: req.UAN,
+        PAN: req.PAN,
+        PFNo: req.PFNo,
+        ESINo: req.ESINo,
+        //
         image: req.body.image,
         employmentStatusId: req.body.employmentStatusId,
         departmentId: req.body.departmentId,
@@ -126,106 +140,163 @@ const register = async (req, res) => {
 };
 
 const getAllUser = async (req, res) => {
-  if (req.query.query === 'all') {
-    try {
-      const allUser = await prisma.user.findMany({
-        include: {
-          designationHistory: {
-            include: {
-              designation: true,
-            },
-          },
-          salaryHistory: true,
-          educations: true,
-          employmentStatus: true,
-          department: true,
-          role: true,
-          shift: true,
-          leavePolicy: true,
-          weeklyHoliday: true,
-          awardHistory: true,
-        },
-      });
-      return res.status(200).json(
-        allUser
-          .map(u => {
-            const { password, ...userWithoutPassword } = u;
-            return userWithoutPassword;
-          })
-          .sort((a, b) => a.id - b.id)
-      );
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
-    }
-  } else if (req.query.status === 'false') {
-    try {
-      const allUser = await prisma.user.findMany({
-        where: {
-          status: false,
-        },
-        include: {
-          designationHistory: {
-            include: {
-              designation: true,
-            },
-          },
-          salaryHistory: true,
-          educations: true,
-          employmentStatus: true,
-          department: true,
-          role: true,
-          shift: true,
-          leavePolicy: true,
-          weeklyHoliday: true,
-          awardHistory: true,
-        },
-      });
-      return res.status(200).json(
-        allUser
-          .map(u => {
-            const { password, ...userWithoutPassword } = u;
-            return userWithoutPassword;
-          })
-          .sort((a, b) => a.id - b.id)
-      );
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
-    }
-  } else {
-    try {
-      const allUser = await prisma.user.findMany({
-        where: {
-          status: true,
-        },
-        include: {
-          designationHistory: {
-            include: {
-              designation: true,
-            },
-          },
-          salaryHistory: true,
-          educations: true,
-          employmentStatus: true,
-          department: true,
-          role: true,
-          shift: true,
-          leavePolicy: true,
-          weeklyHoliday: true,
-          awardHistory: true,
-        },
-      });
-      return res.status(200).json(
-        allUser
-          .map(u => {
-            const { password, ...userWithoutPassword } = u;
-            return userWithoutPassword;
-          })
-          .sort((a, b) => a.id - b.id)
-      );
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
-    }
+  const filter = pick(req.query, ['status', 'branchId', 'departmentId']);
+
+  if (filter.status) {
+    filter.status =
+      filter.status.toLowerCase() === 'true'
+        ? true
+        : filter.status.toLowerCase() === 'false'
+        ? false
+        : 'all';
   }
+  if (filter.branchId) {
+    filter.branchId = {
+      in: filter.branchId.split(',').map(id => parseInt(id)),
+    };
+  }
+  if (filter.departmentId) {
+    filter.departmentId = {
+      in: filter.departmentId.split(',').map(id => parseInt(id)),
+    };
+  }
+
+  try {
+    const allUser = await prisma.user.findMany({
+      where: filter,
+      include: {
+        designationHistory: {
+          include: {
+            designation: true,
+          },
+        },
+        salaryHistory: true,
+        educations: true,
+        employmentStatus: true,
+        department: true,
+        branch: true,
+        role: true,
+        shift: true,
+        leavePolicy: true,
+        weeklyHoliday: true,
+        awardHistory: true,
+      },
+    });
+    return res.status(200).json(
+      allUser
+        .map(u => {
+          const { password, ...userWithoutPassword } = u;
+          return userWithoutPassword;
+        })
+        .sort((a, b) => a.id - b.id)
+    );
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+  // if (req.query.query === 'all') {
+  //   try {
+  //     const allUser = await prisma.user.findMany({
+  //       include: {
+  //         designationHistory: {
+  //           include: {
+  //             designation: true,
+  //           },
+  //         },
+  //         salaryHistory: true,
+  //         educations: true,
+  //         employmentStatus: true,
+  //         department: true,
+  //         branch: true,
+  //         role: true,
+  //         shift: true,
+  //         leavePolicy: true,
+  //         weeklyHoliday: true,
+  //         awardHistory: true,
+  //       },
+  //     });
+  //     return res.status(200).json(
+  //       allUser
+  //         .map(u => {
+  //           const { password, ...userWithoutPassword } = u;
+  //           return userWithoutPassword;
+  //         })
+  //         .sort((a, b) => a.id - b.id)
+  //     );
+  //   } catch (error) {
+  //     return res.status(500).json({ message: error.message });
+  //   }
+  // } else if (req.query.status === 'false') {
+  //   try {
+  //     const allUser = await prisma.user.findMany({
+  //       where: {
+  //         status: false,
+  //       },
+  //       include: {
+  //         designationHistory: {
+  //           include: {
+  //             designation: true,
+  //           },
+  //         },
+  //         salaryHistory: true,
+  //         educations: true,
+  //         employmentStatus: true,
+  //         department: true,
+  //         branch: true,
+
+  //         role: true,
+  //         shift: true,
+  //         leavePolicy: true,
+  //         weeklyHoliday: true,
+  //         awardHistory: true,
+  //       },
+  //     });
+  //     return res.status(200).json(
+  //       allUser
+  //         .map(u => {
+  //           const { password, ...userWithoutPassword } = u;
+  //           return userWithoutPassword;
+  //         })
+  //         .sort((a, b) => a.id - b.id)
+  //     );
+  //   } catch (error) {
+  //     return res.status(500).json({ message: error.message });
+  //   }
+  // } else {
+  //   try {
+  //     const allUser = await prisma.user.findMany({
+  //       where: {
+  //         status: true,
+  //       },
+  //       include: {
+  //         designationHistory: {
+  //           include: {
+  //             designation: true,
+  //           },
+  //         },
+  //         salaryHistory: true,
+  //         educations: true,
+  //         employmentStatus: true,
+  //         department: true,
+  //         branch: true,
+  //         role: true,
+  //         shift: true,
+  //         leavePolicy: true,
+  //         weeklyHoliday: true,
+  //         awardHistory: true,
+  //       },
+  //     });
+  //     return res.status(200).json(
+  //       allUser
+  //         .map(u => {
+  //           const { password, ...userWithoutPassword } = u;
+  //           return userWithoutPassword;
+  //         })
+  //         .sort((a, b) => a.id - b.id)
+  //     );
+  //   } catch (error) {
+  //     return res.status(500).json({ message: error.message });
+  //   }
+  // }
 };
 
 const getSingleUser = async (req, res) => {

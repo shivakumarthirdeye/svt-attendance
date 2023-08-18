@@ -41,6 +41,7 @@ import EmployeeAward from '../UI/EmployeeAward';
 import AwardHistoryEditPopup from '../UI/PopUp/AwardHistoryEditPopup';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
 import { loadAllDesignation } from '../../redux/rtk/features/designation/designationSlice';
+import { AiFillBank } from 'react-icons/ai';
 
 //PopUp
 
@@ -437,6 +438,121 @@ const DetailStaff = () => {
                       <p className='txt-color-secondary ml-2'>
                         {user?.bloodGroup || 'No Blood Group'}
                       </p>
+                    </li>
+                  </ul>
+                </div>
+              </Col>
+              <Col
+                xs={24}
+                sm={12}
+                md={12}
+                lg={11}
+                xl={11}
+                className='new-card rounded h-auto m-2'
+              >
+                <ProfileCardText className='text-start'>
+                  Bank Info
+                </ProfileCardText>
+
+                <Hr />
+
+                <div className='m-5'>
+                  <ul className='space-y-4'>
+                    <li className='flex items-center'>
+                      <AiFillBank
+                        className='mr-3'
+                        style={{ fontSize: '15px' }}
+                      />
+
+                      <span className='txt-color-2 font-medium'>
+                        Bank Name:
+                      </span>
+                      <p className='txt-color-secondary ml-2'>
+                        {user?.bankName}
+                      </p>
+                    </li>
+                    <li className='flex items-center'>
+                      <TeamOutlined
+                        className='mr-3'
+                        style={{ fontSize: '15px' }}
+                      />
+                      <span className='txt-color-2 font-medium'>
+                        Account number:
+                      </span>
+                      <p className='txt-color-secondary ml-2'>
+                        {user?.accountNumber}
+                      </p>
+                    </li>
+                    <li className='flex items-center'>
+                      <TeamOutlined
+                        className='mr-3'
+                        style={{ fontSize: '15px' }}
+                      />
+                      <span className='txt-color-2 font-medium'>IFSC:</span>
+                      <p className='txt-color-secondary ml-2'>{user?.ifsc}</p>
+                    </li>
+                    <li className='flex items-center'>
+                      <TrophyOutlined
+                        className='mr-3'
+                        style={{ fontSize: '15px' }}
+                      />
+                      <span className='txt-color-2 font-medium'>
+                        Account holder’s name:
+                      </span>
+                      <p className='txt-color-secondary ml-2'>
+                        {user?.accountHolderName}
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </Col>
+              <Col
+                xs={24}
+                sm={12}
+                md={12}
+                lg={11}
+                xl={11}
+                className='new-card rounded h-auto m-2'
+              >
+                <ProfileCardText className='text-start'>
+                  Additional information
+                </ProfileCardText>
+
+                <Hr />
+
+                <div className='m-5'>
+                  <ul className='space-y-4'>
+                    <li className='flex items-center'>
+                      <span className='txt-color-2 font-medium'>
+                        Employee date of birth :
+                      </span>
+                      <p className='txt-color-secondary ml-2'>
+                        {user?.dateOfBirth}
+                      </p>
+                    </li>
+                    <li className='flex items-center'>
+                      <span className='txt-color-2 font-medium'>
+                        Aadhar number :
+                      </span>
+                      <p className='txt-color-secondary ml-2'>
+                        {user?.aadharNumber}
+                      </p>
+                    </li>
+                    <li className='flex items-center'>
+                      <span className='txt-color-2 font-medium'>UAN:</span>
+                      <p className='txt-color-secondary ml-2'>{user?.UAN}</p>
+                    </li>
+                    <li className='flex items-center'>
+                      <span className='txt-color-2 font-medium'>PAN :</span>
+                      <p className='txt-color-secondary ml-2'>{user?.PAN}</p>
+                    </li>
+                    <li className='flex items-center'>
+                      <span className='txt-color-2 font-medium'>PF no :</span>
+                      <p className='txt-color-secondary ml-2'>{user?.PFNo}</p>
+                    </li>
+                    <li className='flex items-center'>
+                      <span className='txt-color-2 font-medium'>ESI no :</span>
+                      <p className='txt-color-secondary ml-2'>{user?.ESINo}</p>
                     </li>
                   </ul>
                 </div>
