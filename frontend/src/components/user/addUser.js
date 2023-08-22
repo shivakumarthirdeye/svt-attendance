@@ -30,6 +30,7 @@ import { loadAllWeeklyHoliday } from '../../redux/rtk/features/weeklyHoliday/wee
 import { loadAllLeavePolicy } from '../../redux/rtk/features/leavePolicy/leavePolicySlice';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
 import { getBranch } from '../branch/BranchApis';
+import { getAllOfficeTimePolicies } from '../officeTimePolicy/officeTimePolicyApis';
 
 const AddUser = () => {
   const [loader, setLoader] = useState(false);
@@ -39,6 +40,7 @@ const AddUser = () => {
   const [list, setList] = useState(null);
   const [department, setDepartment] = useState(null);
   const [branch, setBranch] = useState(null);
+  const [timePolicies, setTimePolicies] = useState([]);
 
   const [education, setEducation] = useState([
     {
@@ -75,6 +77,12 @@ const AddUser = () => {
   useEffect(() => {
     getBranch()
       .then(d => setBranch(d))
+      .catch(error => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    getAllOfficeTimePolicies()
+      .then(d => setTimePolicies(d))
       .catch(error => console.log(error));
   }, []);
 
@@ -532,6 +540,32 @@ const AddUser = () => {
                       leavePolicy.map(leavePolicy => (
                         <Option key={leavePolicy.id} value={leavePolicy.id}>
                           {leavePolicy.name}
+                        </Option>
+                      ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    { required: true, message: 'Please input Department!' },
+                  ]}
+                  label='Office Time Policy'
+                  name={'officeTimePolicyId'}
+                  style={{ marginBottom: '10px' }}
+                >
+                  <Select
+                    loading={!timePolicies}
+                    size='middle'
+                    mode='single'
+                    allowClear
+                    style={{
+                      width: '100%',
+                    }}
+                    placeholder='Please select'
+                  >
+                    {timePolicies &&
+                      timePolicies.map(timePolicy => (
+                        <Option key={timePolicy.id} value={timePolicy.id}>
+                          {timePolicy.name}
                         </Option>
                       ))}
                   </Select>

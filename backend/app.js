@@ -75,6 +75,10 @@ app.use('/api/email', require('./routes/email/email.routes'));
 app.use('/api/department', require('./routes/hr/department/department.routes'));
 app.use('/api/branch', require('./routes/hr/branch/branch.routes'));
 app.use(
+  '/api/office-time-policy',
+  require('./routes/hr/officeTimePolicy/officeTimePolicy.routes')
+);
+app.use(
   '/api/employment-status',
   require('./routes/hr/employmentStatus/employmentStatus.routes')
 );

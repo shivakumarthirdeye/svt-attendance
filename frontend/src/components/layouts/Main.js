@@ -107,10 +107,9 @@ function Main({ children }) {
                   className='text-white text-center mt-2 mb-1 '
                   style={{ fontSize: '25px' }}
                 >
-                  HRM
                   <strong style={{ color: '#6ECCAF	', fontWeight: 'bold' }}>
                     {' '}
-                    OS
+                    SVT
                   </strong>
                 </h2>
               </div>

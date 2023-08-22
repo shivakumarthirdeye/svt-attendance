@@ -192,6 +192,15 @@ const Sidenav = ({ color, sideNavOpenKeys }) => {
       children: [
         hasPermission('read-employmentStatus') && {
           label: (
+            <NavLink to='/admin/office-time-policy'>
+              <span>Office time policy</span>
+            </NavLink>
+          ),
+          key: 'office-time-policy',
+          icon: <FileDoneOutlined />,
+        },
+        hasPermission('read-employmentStatus') && {
+          label: (
             <NavLink to='/admin/employment-status'>
               <span>Status</span>
             </NavLink>

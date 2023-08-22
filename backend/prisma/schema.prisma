@@ -47,6 +47,8 @@ model user {
   departmentId       Int?
   branch             branch?           @relation(fields: [branchId], references: [id])
   branchId           Int?
+  officeTimePolicy   officeTimePolicy? @relation(fields: [officeTimePolicyId], references: [id])
+  officeTimePolicyId Int?
 
   role            role?          @relation(fields: [roleId], references: [id])
   roleId          Int?
@@ -98,6 +100,21 @@ model salaryHistory {
   status    Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model officeTimePolicy {
+  id                 Int      @id @default(autoincrement())
+  user               user[]
+  name               String
+  lateArrivalTime    String
+  lateDeductionType  String
+  lateDeductionRate  String
+  earlyDepartureTime String
+  earlyDeductionType String
+  earlyDeductionRate String
+  markAsHalfDay      String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model designation {

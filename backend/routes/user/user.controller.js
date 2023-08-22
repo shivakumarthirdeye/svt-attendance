@@ -98,6 +98,7 @@ const register = async (req, res) => {
         employmentStatusId: req.body.employmentStatusId,
         departmentId: req.body.departmentId,
         branchId: req.body.branchId,
+        officeTimePolicyId: req.body.officeTimePolicyId,
         roleId: req.body.roleId,
         shiftId: req.body.shiftId,
         leavePolicyId: req.body.leavePolicyId,
@@ -319,6 +320,7 @@ const getSingleUser = async (req, res) => {
       shift: true,
       leavePolicy: true,
       weeklyHoliday: true,
+      officeTimePolicy: true,
       awardHistory: {
         include: {
           award: true,
@@ -407,6 +409,7 @@ const updateSingleUser = async (req, res) => {
           userName: req.body.userName,
           gender: req.body.gender,
           branchId: req.body.branchId,
+
           password: hash,
           email: req.body.email,
           phone: req.body.phone,
@@ -419,6 +422,19 @@ const updateSingleUser = async (req, res) => {
           leaveDate: leave_date,
           employeeId: req.body.employeeId,
           bloodGroup: req.body.bloodGroup,
+          // BANK
+          bankName: req.body.bankName,
+          accountNumber: req.body.accountNumber,
+          ifsc: req.body.ifsc,
+          accountHolderName: req.body.accountHolderName,
+          // Additional
+          dateOfBirth: req.dateOfBirth,
+          aadharNumber: req.aadharNumber,
+          UAN: req.UAN,
+          PAN: req.PAN,
+          PFNo: req.PFNo,
+          ESINo: req.ESINo,
+          //
           image: req.body.image,
           employmentStatusId: req.body.employmentStatusId,
           departmentId: req.body.departmentId,

@@ -68,6 +68,8 @@ import AddAward from './components/award/AddAward';
 import GetAllAward from './components/award/GetAllAward';
 import Branch from './components/branch/Branch';
 import DetailBranch from './components/branch/DetailsBranch';
+import OfficeTimePolicy from './components/officeTimePolicy';
+import OfficeTimePolicyDetails from './components/officeTimePolicy/officeTimePolicyDetails';
 
 function App() {
   return (
@@ -184,6 +186,14 @@ function App() {
                 <UserPrivateRoute permission={'read-employmentStatus'} />
               }
             >
+              <Route
+                path='/admin/office-time-policy'
+                element={<OfficeTimePolicy />}
+              />
+              <Route
+                path='/admin/office-time-policy/:id'
+                element={<OfficeTimePolicyDetails />}
+              />
               <Route
                 path='/admin/employment-status'
                 element={<EmploymentStatus />}
