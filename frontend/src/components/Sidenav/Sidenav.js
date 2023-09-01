@@ -379,6 +379,23 @@ const Sidenav = ({ color, sideNavOpenKeys }) => {
         },
       ],
     },
+    hasPermission('read-account') && {
+      label: 'REPORT',
+      key: 'all-report',
+      icon: <FlagOutlined />,
+
+      children: [
+        hasPermission('read-account') && {
+          label: (
+            <NavLink to='/admin/reports/master-data'>
+              <span>Master Data</span>
+            </NavLink>
+          ),
+          key: 'masterData',
+          icon: <FileDoneOutlined />,
+        },
+      ],
+    },
 
     (hasPermission('crate-award') || hasPermission('read-award')) && {
       label: 'AWARDS',

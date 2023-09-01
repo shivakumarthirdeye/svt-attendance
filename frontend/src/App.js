@@ -70,6 +70,7 @@ import Branch from './components/branch/Branch';
 import DetailBranch from './components/branch/DetailsBranch';
 import OfficeTimePolicy from './components/officeTimePolicy';
 import OfficeTimePolicyDetails from './components/officeTimePolicy/officeTimePolicyDetails';
+import MasterData from './components/reports/master-data';
 
 function App() {
   return (
@@ -254,6 +255,11 @@ function App() {
                 path='/admin/account/income'
                 exact
                 element={<IncomeStatement />}
+              />
+              <Route
+                path='/admin/reports/master-data'
+                exact
+                element={<MasterData />}
               />
             </Route>
             {/* === === === Transaction Routes === === === */}
