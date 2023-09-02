@@ -37,11 +37,6 @@ import BranchTable from '../customTables/BranchTable';
 import DesignationTable from '../customTables/DesignationTable';
 
 const MasterData = () => {
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-    setLoader(false);
-  };
-
   const dispatch = useDispatch();
 
   const handleChange = value => {};
