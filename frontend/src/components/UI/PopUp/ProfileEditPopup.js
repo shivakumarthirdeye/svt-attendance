@@ -8,6 +8,8 @@ import {
   Space,
   Modal,
   Typography,
+  Col,
+  Row,
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +37,10 @@ const ProfileEditPopup = ({ data }) => {
   const weeklyHoliday = useSelector(state => state.weeklyHoliday?.list);
   const shift = useSelector(state => state.shift?.list);
   const user = useSelector(state => state.users?.user);
+  console.log(
+    '🚀 ~ file: ProfileEditPopup.js:40 ~ ProfileEditPopup ~ user:',
+    user
+  );
 
   const { id } = useParams('id');
 
@@ -47,10 +53,6 @@ const ProfileEditPopup = ({ data }) => {
   const [branch, setBranch] = useState(null);
 
   const [initialValues, setInitialValues] = useState({});
-  console.log(
-    '🚀 ~ file: ProfileEditPopup.js:50 ~ ProfileEditPopup ~ initialValues:',
-    initialValues
-  );
 
   const [roleId, setRoleId] = useState('');
   const [departmentId, setDepartmentId] = useState('');
@@ -96,6 +98,15 @@ const ProfileEditPopup = ({ data }) => {
       shiftId: user.shiftId ? user.shiftId : '',
       leavePolicyId: user.leavePolicyId ? user.leavePolicyId : '',
       weeklyHolidayId: user.weeklyHolidayId ? user.weeklyHolidayId : '',
+      bankName: user.bankName ? user.bankName : '',
+      accountNumber: user.accountNumber ? user.accountNumber : '',
+      ifsc: user.ifsc ? user.ifsc : '',
+      accountHolderName: user.accountHolderName ? user.accountHolderName : '',
+      dateOfBirth: user.dateOfBirth ? user.dateOfBirth : '',
+      aadharNumber: user.aadharNumber ? user.aadharNumber : '',
+      PAN: user.PAN ? user.PAN : '',
+      PFNo: user.PFNo ? user.PFNo : '',
+      ESINo: user.ESINo ? user.ESINo : '',
     });
   }, [id]);
 
@@ -424,6 +435,75 @@ const ProfileEditPopup = ({ data }) => {
               ))}
             </Select>
           </Form.Item>
+
+          <h2 className='text-center text-xl mt-3 mb-3 txt-color'>
+            {' '}
+            Bank account details{' '}
+          </h2>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='Bank name*'
+            name='bankName'
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='Account number*'
+            name='accountNumber'
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='IFSC code*'
+            name='ifsc'
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='Account holder’s name*'
+            name='accountHolderName'
+          >
+            <Input />
+          </Form.Item>
+
+          <h2 className='text-center text-xl mt-3 mb-3 txt-color'>
+            Additional information
+          </h2>
+
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='Employee date of birth'
+            name='dateOfBirth'
+          >
+            <DatePicker className='date-picker dateOfBirth' />
+          </Form.Item>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='Aadhar number'
+            name='aadharNumber'
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item style={{ marginBottom: '10px' }} label='UAN' name='UAN'>
+            <Input />
+          </Form.Item>
+          <Form.Item style={{ marginBottom: '10px' }} label='PAN' name='PAN'>
+            <Input />
+          </Form.Item>
+          <Form.Item style={{ marginBottom: '10px' }} label='PF no' name='PFNo'>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+            label='ESI no :'
+            name='ESINo'
+          >
+            <Input />
+          </Form.Item>
+
           {/* TODO: Add a Upload Seciton for Image */}
 
           <Form.Item

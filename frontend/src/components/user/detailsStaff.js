@@ -527,7 +527,7 @@ const DetailStaff = () => {
                         Employee date of birth :
                       </span>
                       <p className='txt-color-secondary ml-2'>
-                        {user?.dateOfBirth}
+                        {moment(user?.dateOfBirth).format('LL')}
                       </p>
                     </li>
                     <li className='flex items-center'>
@@ -671,7 +671,7 @@ const DetailStaff = () => {
                 </div>
               </Col>
 
-              <Col
+              {/* <Col
                 xs={24}
                 sm={12}
                 md={12}
@@ -707,7 +707,7 @@ const DetailStaff = () => {
                     </div>
                   )}
                 </div>
-              </Col>
+              </Col> */}
             </Row>
           </div>
         ) : (

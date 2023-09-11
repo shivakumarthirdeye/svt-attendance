@@ -229,6 +229,7 @@ model leaveApplication {
   leaveTo         DateTime
   acceptLeaveFrom DateTime?
   acceptLeaveTo   DateTime?
+  isHalfDay       Boolean?  @default(false)
   acceptLeaveBy   Int?
   leaveDuration   Int?
   reason          String?

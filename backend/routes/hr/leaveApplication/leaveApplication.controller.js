@@ -1,10 +1,10 @@
-const { getPagination } = require("../../../utils/query");
-const { PrismaClient } = require("@prisma/client");
+const { getPagination } = require('../../../utils/query');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 //create a new employee
 const createSingleLeave = async (req, res) => {
-  if (req.query.query === "deletemany") {
+  if (req.query.query === 'deletemany') {
     try {
       // delete many designation at once
       const deletedLeave = await prisma.leaveApplication.deleteMany({
@@ -38,6 +38,7 @@ const createSingleLeave = async (req, res) => {
           leaveFrom: leaveFrom,
           leaveTo: leaveTo,
           leaveDuration: leaveDuration,
+          isHalfDay: req.body.isHalfDay,
           reason: req.body.reason ? req.body.reason : undefined,
         },
       });
@@ -50,11 +51,11 @@ const createSingleLeave = async (req, res) => {
 };
 
 const getAllLeave = async (req, res) => {
-  if (req.query.query === "all") {
+  if (req.query.query === 'all') {
     const allLeave = await prisma.leaveApplication.findMany({
       orderBy: [
         {
-          id: "asc",
+          id: 'asc',
         },
       ],
       include: {
@@ -68,7 +69,7 @@ const getAllLeave = async (req, res) => {
     });
 
     // get the id and acceptLeaveBy from all leave array
-    const acceptLeaveBy = allLeave.map((item) => {
+    const acceptLeaveBy = allLeave.map(item => {
       return {
         ...item,
         acceptLeaveBy: item.acceptLeaveBy,
@@ -77,7 +78,7 @@ const getAllLeave = async (req, res) => {
 
     // get the acceptLeaveBy from user table and return the firstName and lastName into acceptLeaveBy and if acceptLeaveBy is null then return null into acceptLeaveBy for that object
     const result = await Promise.all(
-      acceptLeaveBy.map(async (item) => {
+      acceptLeaveBy.map(async item => {
         if (item.acceptLeaveBy) {
           const acceptLeaveBy = await prisma.user.findUnique({
             where: {
@@ -109,7 +110,7 @@ const getAllLeave = async (req, res) => {
       const allLeave = await prisma.leaveApplication.findMany({
         orderBy: [
           {
-            id: "asc",
+            id: 'asc',
           },
         ],
         skip: Number(skip),
@@ -127,7 +128,7 @@ const getAllLeave = async (req, res) => {
         },
       });
       // get the id and acceptLeaveBy from all leave array
-      const acceptLeaveBy = allLeave.map((item) => {
+      const acceptLeaveBy = allLeave.map(item => {
         return {
           ...item,
           acceptLeaveBy: item.acceptLeaveBy,
@@ -136,7 +137,7 @@ const getAllLeave = async (req, res) => {
 
       // get the acceptLeaveBy from user table and return the firstName and lastName into acceptLeaveBy and if acceptLeaveBy is null then return null into acceptLeaveBy for that object
       const result = await Promise.all(
-        acceptLeaveBy.map(async (item) => {
+        acceptLeaveBy.map(async item => {
           if (item.acceptLeaveBy) {
             const acceptLeaveBy = await prisma.user.findUnique({
               where: {
@@ -241,29 +242,29 @@ const getLeaveByUserId = async (req, res) => {
       where: {
         AND: {
           userId: Number(req.params.id),
-          status: "ACCEPTED",
+          status: 'ACCEPTED',
         },
       },
       orderBy: [
         {
-          id: "desc",
+          id: 'desc',
         },
       ],
     });
 
     // check if the user has any leave
-    const isId = getLeaveTo.map((item) => item.id);
+    const isId = getLeaveTo.map(item => item.id);
 
     if (isId.length === 0)
-      return res.status(200).json({ message: "No leave found for this user" });
+      return res.status(200).json({ message: 'No leave found for this user' });
 
     // check if the user is on leave
     const leaveTo = getLeaveTo[0].leaveTo;
     const currentDate = new Date();
 
-    let leaveStatus = "";
-    if (leaveTo > currentDate) leaveStatus = "on leave";
-    else leaveStatus = "not on leave";
+    let leaveStatus = '';
+    if (leaveTo > currentDate) leaveStatus = 'on leave';
+    else leaveStatus = 'not on leave';
 
     // get all leave history
     const singleLeave = await prisma.leaveApplication.findMany({
@@ -274,7 +275,7 @@ const getLeaveByUserId = async (req, res) => {
       },
       orderBy: [
         {
-          id: "desc",
+          id: 'desc',
         },
       ],
     });

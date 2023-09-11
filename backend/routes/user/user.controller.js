@@ -428,12 +428,12 @@ const updateSingleUser = async (req, res) => {
           ifsc: req.body.ifsc,
           accountHolderName: req.body.accountHolderName,
           // Additional
-          dateOfBirth: req.dateOfBirth,
-          aadharNumber: req.aadharNumber,
-          UAN: req.UAN,
-          PAN: req.PAN,
-          PFNo: req.PFNo,
-          ESINo: req.ESINo,
+          dateOfBirth: req.body.dateOfBirth,
+          aadharNumber: req.body.aadharNumber,
+          UAN: req.body.UAN,
+          PAN: req.body.PAN,
+          PFNo: req.body.PFNo,
+          ESINo: req.body.ESINo,
           //
           image: req.body.image,
           employmentStatusId: req.body.employmentStatusId,
@@ -461,6 +461,10 @@ const updateSingleUser = async (req, res) => {
       return res.status(200).json(userWithoutPassword);
     }
   } catch (error) {
+    console.log(
+      '🚀 ~ file: user.controller.js:464 ~ updateSingleUser ~ error:',
+      error
+    );
     console.log(error.message);
     return res.status(500).json({ message: error.message });
   }
