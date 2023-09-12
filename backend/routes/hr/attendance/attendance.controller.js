@@ -1,6 +1,6 @@
-const { getPagination } = require("../../../utils/query");
-const { PrismaClient } = require("@prisma/client");
-const moment = require("moment");
+const { getPagination } = require('../../../utils/query');
+const { PrismaClient } = require('@prisma/client');
+const moment = require('moment');
 const prisma = new PrismaClient();
 
 //create a new employee
@@ -9,10 +9,10 @@ const createAttendance = async (req, res) => {
     const id = parseInt(req.body.userId);
     if (
       !(id === req.auth.sub) &&
-      !req.auth.permissions.includes("create-attendance")
+      !req.auth.permissions.includes('create-attendance')
     ) {
       return res.status(401).json({
-        message: "Unauthorized. You are not authorize to give attendance",
+        message: 'Unauthorized. You are not authorize to give attendance',
       });
     }
     // get user shift
@@ -26,8 +26,8 @@ const createAttendance = async (req, res) => {
     });
 
     // format time
-    const startTime = moment(user.shift.startTime, "h:mm A");
-    const endTime = moment(user.shift.endTime, "h:mm A");
+    const startTime = moment(user.shift.startTime, 'h:mm A');
+    const endTime = moment(user.shift.endTime, 'h:mm A');
 
     // check if user is late or early
     const isLate = moment().isAfter(startTime);
@@ -42,7 +42,7 @@ const createAttendance = async (req, res) => {
       },
     });
 
-    if (req.query.query === "manualPunch") {
+    if (req.query.query === 'manualPunch') {
       const inTime = new Date(req.body.inTime);
       const outTime = new Date(req.body.outTime);
 
@@ -54,8 +54,11 @@ const createAttendance = async (req, res) => {
           inTime: inTime,
           outTime: outTime,
           punchBy: req.auth.sub,
-          inTimeStatus: req.body.inTimeStatus ? req.body.inTimeStatus : null,
-          outTimeStatus: req.body.outTimeStatus ? req.body.outTimeStatus : null,
+          // inTimeStatus: req.body.inTimeStatus ? req.body.inTimeStatus : null,
+          // outTimeStatus: req.body.outTimeStatus ? req.body.outTimeStatus : null,
+          inTimeStatus: isEarly ? 'Early' : isLate ? 'Late' : 'On Time',
+          outTimeStatus: isOutEarly ? 'Early' : isOutLate ? 'Late' : 'On Time',
+
           comment: req.body.comment ? req.body.comment : null,
           ip: req.body.ip ? req.body.ip : null,
           totalHour: parseFloat(totalHours.toFixed(3)),
@@ -72,7 +75,7 @@ const createAttendance = async (req, res) => {
           punchBy: req.auth.sub,
           comment: req.body.comment ? req.body.comment : null,
           ip: req.body.ip ? req.body.ip : null,
-          inTimeStatus: isEarly ? "Early" : isLate ? "Late" : "On Time",
+          inTimeStatus: isEarly ? 'Early' : isLate ? 'Late' : 'On Time',
           outTimeStatus: null,
         },
       });
@@ -88,7 +91,118 @@ const createAttendance = async (req, res) => {
         data: {
           outTime: outTime,
           totalHour: parseFloat(totalHours.toFixed(3)),
-          outTimeStatus: isOutEarly ? "Early" : isOutLate ? "Late" : "On Time",
+          outTimeStatus: isOutEarly ? 'Early' : isOutLate ? 'Late' : 'On Time',
+        },
+      });
+      return res.status(200).json(newAttendance);
+    }
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+const updateAttendance = async (req, res) => {
+  try {
+    const attendanceId = req.params.id;
+
+    const id = parseInt(req.body.userId);
+    if (
+      !(id === req.auth.sub) &&
+      !req.auth.permissions.includes('create-attendance')
+    ) {
+      return res.status(401).json({
+        message: 'Unauthorized. You are not authorize to give attendance',
+      });
+    }
+    // get user shift
+    const user = await prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        shift: true,
+      },
+    });
+
+    // format time
+    const startTime = moment(user.shift.startTime, 'h:mm A');
+
+    const endTime = moment(user.shift.endTime, 'h:mm A');
+
+    // check if user is late or early
+    const isLate = moment().isAfter(startTime);
+    const isEarly = moment().isBefore(startTime);
+    const isOutEarly = moment().isAfter(endTime);
+    const isOutLate = moment().isBefore(endTime);
+
+    const attendance = await prisma.attendance.findFirst({
+      where: {
+        userId: id,
+        outTime: null,
+      },
+    });
+
+    if (req.query.query === 'manualPunch') {
+      const inTime = new Date(req.body.inTime);
+      console.log(
+        '🚀 ~ file: attendance.controller.js:147 ~ updateAttendance ~ inTime:',
+        inTime
+      );
+      const outTime = new Date(req.body.outTime);
+      console.log(
+        '🚀 ~ file: attendance.controller.js:149 ~ updateAttendance ~ outTime:',
+        outTime
+      );
+
+      const totalHours = Math.abs(outTime - inTime) / 36e5;
+
+      const newAttendance = await prisma.attendance.update({
+        where: {
+          id: Number(attendanceId),
+        },
+
+        data: {
+          userId: id,
+          inTime: inTime,
+          outTime: outTime,
+          punchBy: req.auth.sub,
+          // inTimeStatus: req.body.inTimeStatus ? req.body.inTimeStatus : null,
+          // outTimeStatus: req.body.outTimeStatus ? req.body.outTimeStatus : null,
+          inTimeStatus: isEarly ? 'Early' : isLate ? 'Late' : 'On Time',
+          outTimeStatus: isOutEarly ? 'Early' : isOutLate ? 'Late' : 'On Time',
+          comment: req.body.comment ? req.body.comment : null,
+          ip: req.body.ip ? req.body.ip : null,
+          status: req.body.status,
+          totalHour: parseFloat(totalHours.toFixed(3)),
+        },
+      });
+      return res.status(201).json(newAttendance);
+    } else if (attendance === null) {
+      const inTime = new Date(moment.now());
+      const newAttendance = await prisma.attendance.create({
+        data: {
+          userId: id,
+          inTime: inTime,
+          outTime: null,
+          punchBy: req.auth.sub,
+          comment: req.body.comment ? req.body.comment : null,
+          ip: req.body.ip ? req.body.ip : null,
+          inTimeStatus: isEarly ? 'Early' : isLate ? 'Late' : 'On Time',
+          outTimeStatus: null,
+        },
+      });
+      return res.status(201).json(newAttendance);
+    } else {
+      const outTime = new Date(moment.now());
+      const totalHours = Math.abs(outTime - attendance.inTime) / 36e5;
+
+      const newAttendance = await prisma.attendance.update({
+        where: {
+          id: attendance.id,
+        },
+        data: {
+          outTime: outTime,
+          totalHour: parseFloat(totalHours.toFixed(3)),
+          outTimeStatus: isOutEarly ? 'Early' : isOutLate ? 'Late' : 'On Time',
         },
       });
       return res.status(200).json(newAttendance);
@@ -99,11 +213,11 @@ const createAttendance = async (req, res) => {
 };
 
 const getAllAttendance = async (req, res) => {
-  if (req.query.query === "all") {
+  if (req.query.query === 'all') {
     const allAttendance = await prisma.attendance.findMany({
       orderBy: [
         {
-          id: "asc",
+          id: 'asc',
         },
       ],
       include: {
@@ -118,7 +232,7 @@ const getAllAttendance = async (req, res) => {
 
     const punchBy = await prisma.user.findMany({
       where: {
-        id: { in: allAttendance.map((item) => item.punchBy) },
+        id: { in: allAttendance.map(item => item.punchBy) },
       },
       select: {
         id: true,
@@ -126,7 +240,7 @@ const getAllAttendance = async (req, res) => {
         lastName: true,
       },
     });
-    const result = allAttendance.map((attendance) => {
+    const result = allAttendance.map(attendance => {
       return {
         ...attendance,
         punchBy: punchBy,
@@ -140,7 +254,7 @@ const getAllAttendance = async (req, res) => {
       const allAttendance = await prisma.attendance.findMany({
         orderBy: [
           {
-            id: "asc",
+            id: 'asc',
           },
         ],
         skip: Number(skip),
@@ -162,7 +276,7 @@ const getAllAttendance = async (req, res) => {
       });
       const punchBy = await prisma.user.findMany({
         where: {
-          id: { in: allAttendance.map((item) => item.punchBy) },
+          id: { in: allAttendance.map(item => item.punchBy) },
         },
         select: {
           id: true,
@@ -170,7 +284,7 @@ const getAllAttendance = async (req, res) => {
           lastName: true,
         },
       });
-      const result = allAttendance.map((attendance) => {
+      const result = allAttendance.map(attendance => {
         return {
           ...attendance,
           punchBy: punchBy,
@@ -230,7 +344,7 @@ const getAttendanceByUserId = async (req, res) => {
       },
       orderBy: [
         {
-          id: "asc",
+          id: 'asc',
         },
       ],
       include: {
@@ -245,7 +359,7 @@ const getAttendanceByUserId = async (req, res) => {
 
     const punchBy = await prisma.user.findMany({
       where: {
-        id: { in: allAttendance.map((item) => item.punchBy) },
+        id: { in: allAttendance.map(item => item.punchBy) },
       },
       select: {
         id: true,
@@ -253,7 +367,7 @@ const getAttendanceByUserId = async (req, res) => {
         lastName: true,
       },
     });
-    const result = allAttendance.map((attendance) => {
+    const result = allAttendance.map(attendance => {
       return {
         ...attendance,
         punchBy: punchBy,
@@ -275,7 +389,7 @@ const getLastAttendanceByUserId = async (req, res) => {
       },
       orderBy: [
         {
-          id: "desc",
+          id: 'desc',
         },
       ],
     });
@@ -291,4 +405,5 @@ module.exports = {
   getSingleAttendance,
   getAttendanceByUserId,
   getLastAttendanceByUserId,
+  updateAttendance,
 };

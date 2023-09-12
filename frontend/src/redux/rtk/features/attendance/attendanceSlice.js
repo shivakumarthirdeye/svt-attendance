@@ -80,6 +80,35 @@ export const addManualAttendance = createAsyncThunk(
     }
   }
 );
+export const updateManualAttendance = createAsyncThunk(
+  'attendance/addManualAttendance',
+  async values => {
+    try {
+      const { data } = await axios({
+        method: 'patch',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        url: `attendance/${values.id}?query=manualPunch`,
+        data: {
+          ...values,
+        },
+      });
+      toast.success('Attendance Added');
+      return {
+        data,
+        message: 'success',
+      };
+    } catch (error) {
+      toast.error('Error in adding Attendance try again');
+      console.log(error.message);
+      return {
+        message: 'error',
+      };
+    }
+  }
+);
 
 // get all attendance list paginated
 export const loadAllAttendancePaginated = createAsyncThunk(

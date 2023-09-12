@@ -29,9 +29,9 @@ model user {
   bloodGroup        String?
   image             String?
   // Bank Info
-  bankName          String // @default("SBI")
-  accountNumber     String // @default("123456789")
-  ifsc              String // @default("13234")
+  bankName          String    @default("SBI")
+  accountNumber     String    @default("123456789")
+  ifsc              String    @default("13234")
   accountHolderName String    @default("admin")
   // Addtional Info
   dateOfBirth       String?
@@ -215,7 +215,7 @@ model attendance {
   totalHour     Float?
   inTimeStatus  String?
   outTimeStatus String?
-  status        Boolean   @default(true)
+  status        String    @default("present")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }

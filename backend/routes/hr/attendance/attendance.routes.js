@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 
 const {
   createAttendance,
@@ -6,15 +6,17 @@ const {
   getSingleAttendance,
   getAttendanceByUserId,
   getLastAttendanceByUserId,
-} = require("./attendance.controller");
-const authorize = require("../../../utils/authorize"); // authentication middleware
+  updateAttendance,
+} = require('./attendance.controller');
+const authorize = require('../../../utils/authorize'); // authentication middleware
 
 const attendanceRoutes = express.Router();
 
-attendanceRoutes.post("/", authorize(""), createAttendance);
-attendanceRoutes.get("/", authorize(""), getAllAttendance);
-attendanceRoutes.get("/:id", authorize(""), getSingleAttendance);
-attendanceRoutes.get("/:id/user", authorize(""), getAttendanceByUserId);
-attendanceRoutes.get("/:id/last", authorize(""), getLastAttendanceByUserId);
+attendanceRoutes.post('/', authorize(''), createAttendance);
+attendanceRoutes.get('/', authorize(''), getAllAttendance);
+attendanceRoutes.patch('/:id', authorize(''), updateAttendance);
+attendanceRoutes.get('/:id', authorize(''), getSingleAttendance);
+attendanceRoutes.get('/:id/user', authorize(''), getAttendanceByUserId);
+attendanceRoutes.get('/:id/last', authorize(''), getLastAttendanceByUserId);
 
 module.exports = attendanceRoutes;

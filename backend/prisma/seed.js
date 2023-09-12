@@ -275,6 +275,25 @@ async function main() {
   });
 }
 
+const createUser = async () => {
+  const adminHash = await bcrypt.hash('admin', saltRounds);
+  await prisma.user.create({
+    data: {
+      firstName: 'omega',
+      lastName: 'solution',
+      userName: 'admin',
+      gender: 'Male',
+      password: adminHash,
+      employmentStatusId: 1,
+      departmentId: 1,
+      roleId: 1,
+      shiftId: 1,
+      leavePolicyId: 1,
+      weeklyHolidayId: 1,
+    },
+  });
+};
+
 main()
   .then(async e => {
     console.log('🚀 ~ file: seed.js:279 ~ .then ~ e:', e);
