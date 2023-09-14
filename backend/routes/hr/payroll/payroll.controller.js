@@ -1,7 +1,7 @@
-const { getPagination } = require("../../../utils/query");
-const { PrismaClient } = require("@prisma/client");
+const { getPagination } = require('../../../utils/query');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const calculatePayslip = require("../../../utils/calculatePayslip");
+const calculatePayslip = require('../../../utils/calculatePayslip');
 
 //create a new employee
 const calculatePayroll = async (req, res) => {
@@ -19,7 +19,7 @@ const calculatePayroll = async (req, res) => {
 const generatePayslip = async (req, res) => {
   try {
     const payslip = await prisma.payslip.createMany({
-      data: req.body.map((item) => {
+      data: req.body.map(item => {
         return {
           userId: item.userId,
           salaryMonth: item.salaryMonth,
@@ -51,8 +51,43 @@ const generatePayslip = async (req, res) => {
   }
 };
 
+const addAdvance = async (req, res) => {
+  try {
+    const advance = await prisma.advanceHistory.create({
+      data: {
+        payslipId: req.body.payslipId,
+        amount: parseFloat(req.body.amount),
+        paymentDate: new Date(req.body.paymentDate),
+        notes: req.body.notes,
+      },
+    });
+    console.log(
+      '🚀 ~ file: payroll.controller.js:63 ~ addAdvance ~ advance:',
+      advance
+    );
+    return res.status(200).json(advance);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(400).json({ message: error.message });
+  }
+};
+const getAdvanceHistory = async (req, res) => {
+  try {
+    const advance = await prisma.advanceHistory.findMany({
+      where: {
+        payslipId: parseInt(req.query.payslipId),
+      },
+    });
+
+    return res.status(200).json(advance);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(400).json({ message: error.message });
+  }
+};
+
 const getAllPayslip = async (req, res) => {
-  if (req.query.value === "monthWise") {
+  if (req.query.value === 'monthWise') {
     const { paymentStatus, salaryMonth, salaryYear } = req.query;
     try {
       const allPayslip = await prisma.payslip.findMany({
@@ -73,7 +108,7 @@ const getAllPayslip = async (req, res) => {
           },
         },
         orderBy: {
-          id: "desc",
+          id: 'desc',
         },
       });
       return res.status(200).json(allPayslip);
@@ -94,7 +129,7 @@ const getAllPayslip = async (req, res) => {
           },
         },
         orderBy: {
-          id: "desc",
+          id: 'desc',
         },
       });
       return res.status(200).json(allPayslip);
@@ -151,8 +186,8 @@ const makePayment = async (req, res) => {
         id: parseInt(req.params.id),
       },
     });
-    if (checkPayslip.paymentStatus === "PAID") {
-      return res.status(400).json({ message: "Payslip already paid" });
+    if (checkPayslip.paymentStatus === 'PAID') {
+      return res.status(400).json({ message: 'Payslip already paid' });
     }
     const updatedPayslip = await prisma.payslip.update({
       where: {
@@ -168,7 +203,7 @@ const makePayment = async (req, res) => {
         },
       },
       data: {
-        paymentStatus: "PAID",
+        paymentStatus: 'PAID',
       },
     });
     const transaction = await prisma.transaction.create({
@@ -178,7 +213,7 @@ const makePayment = async (req, res) => {
         credit_id: 1,
         particulars: `Salary paid to ${updatedPayslip.user.firstName} ${updatedPayslip.user.lastName} for the month of ${updatedPayslip.salaryMonth}-${updatedPayslip.salaryYear}`,
         amount: updatedPayslip.totalPayable,
-        type: "salary",
+        type: 'salary',
         related_id: updatedPayslip.id,
       },
     });
@@ -197,4 +232,6 @@ module.exports = {
   getSinglePayslip,
   updatePayslip,
   makePayment,
+  addAdvance,
+  getAdvanceHistory,
 };

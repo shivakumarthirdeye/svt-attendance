@@ -10,6 +10,7 @@ import {
   updateManualAttendance,
 } from '../../../redux/rtk/features/attendance/attendanceSlice';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 dayjs.extend(customParseFormat);
 
@@ -47,14 +48,6 @@ const EditAttendancePopup = ({
 
   const [currentStatus, setCurrentStatus] = useState(status);
   const [currentComment, setCurrentComment] = useState(comment);
-  console.log(
-    '🚀 ~ file: EditAttendancePopup.js:49 ~ currentComment:',
-    currentComment
-  );
-  console.log(
-    '🚀 ~ file: EditAttendancePopup.js:51 ~ currentComment:',
-    currentComment
-  );
 
   const [inTimeDate, setInTimeDate] = useState({
     date: dayjs(inTime).format('YYYY-MM-DD'),
@@ -66,7 +59,6 @@ const EditAttendancePopup = ({
   });
 
   const onFinish = async e => {
-    console.log('🚀 ~ file: EditAttendancePopup.js:58 ~ onFinish ~ e:', e);
     const inTimeDateNew = new Date(inTimeDate.date + ' ' + inTimeDate.time);
     const outTimeDateNew = new Date(outTimeDate.date + ' ' + outTimeDate.time);
 
@@ -92,7 +84,7 @@ const EditAttendancePopup = ({
     }
   };
   const onFinishFailed = errorInfo => {
-    toast.warning('Failed at adding shift');
+    toast.warning('Failed at adding');
     setLoader(false);
   };
 

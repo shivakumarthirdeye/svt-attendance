@@ -270,6 +270,16 @@ model payslip {
   @@unique([userId, salaryMonth, salaryYear])
 }
 
+model advanceHistory {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  paymentDate DateTime
+  notes       String
+  payslipId   Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model announcement {
   id          Int      @id @default(autoincrement())
   title       String
