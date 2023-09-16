@@ -225,6 +225,10 @@ const getAllAttendance = async (req, res) => {
           select: {
             firstName: true,
             lastName: true,
+            department: true,
+            branch: true,
+            role: true,
+            shift: true,
           },
         },
       },
@@ -262,6 +266,7 @@ const getAllAttendance = async (req, res) => {
         where: {
           inTime: {
             gte: new Date(req.query.startdate),
+
             lte: new Date(req.query.enddate),
           },
         },
@@ -270,10 +275,20 @@ const getAllAttendance = async (req, res) => {
             select: {
               firstName: true,
               lastName: true,
+              department: true,
+              branch: true,
+              role: true,
+              shift: true,
+              designationHistory: {
+                include: {
+                  designation: true,
+                },
+              },
             },
           },
         },
       });
+
       const punchBy = await prisma.user.findMany({
         where: {
           id: { in: allAttendance.map(item => item.punchBy) },
@@ -290,6 +305,7 @@ const getAllAttendance = async (req, res) => {
           punchBy: punchBy,
         };
       });
+
       return res.status(200).json(result);
     } catch (error) {
       return res.status(400).json({ message: error.message });

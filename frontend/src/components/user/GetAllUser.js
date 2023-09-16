@@ -19,6 +19,7 @@ import { getBranch } from '../branch/BranchApis';
 import { AiOutlineFilter } from 'react-icons/ai';
 import { getDepartments } from '../department/departmentApis';
 import { loadAllDesignation } from '../../redux/rtk/features/designation/designationSlice';
+import { combineToSingleObject } from '../../utils/helpers';
 
 function CustomTable({ list }) {
   const dispatch = useDispatch();
@@ -173,7 +174,7 @@ function CustomTable({ list }) {
             <div className='mt-0.5'>
               <CsvLinkBtn>
                 <CSVLink
-                  data={list}
+                  data={combineToSingleObject(list)}
                   className='btn btn-dark btn-sm'
                   style={{ marginTop: '5px' }}
                   filename='staffs'

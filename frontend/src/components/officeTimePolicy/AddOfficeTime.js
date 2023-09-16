@@ -33,6 +33,7 @@ import {
   addOfficeTimePolicy,
   getAllOfficeTimePolicies,
 } from './officeTimePolicyApis';
+import { combineToSingleObject } from '../../utils/helpers';
 
 dayjs.extend(customParseFormat);
 
@@ -128,7 +129,7 @@ function CustomTable({ list }) {
           <div>
             <CsvLinkBtn>
               <CSVLink
-                data={list}
+                data={combineToSingleObject(list)}
                 className='btn btn-dark btn-sm mb-1'
                 filename='shift'
               >

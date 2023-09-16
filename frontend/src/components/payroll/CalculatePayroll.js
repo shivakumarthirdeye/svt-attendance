@@ -17,6 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
 import AddAdvancePopup from '../UI/PopUp/AddAdvancePopup';
+import { combineToSingleObject } from '../../utils/helpers';
 
 function CustomTable({ list, loading }) {
   const [columnsToShow, setColumnsToShow] = useState([]);
@@ -236,7 +237,7 @@ function CustomTable({ list, loading }) {
           <div>
             <CsvLinkBtn>
               <CSVLink
-                data={list}
+                data={combineToSingleObject(list)}
                 className='btn btn-dark btn-sm mb-1'
                 filename='payslips'
               >

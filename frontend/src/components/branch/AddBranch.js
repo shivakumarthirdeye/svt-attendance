@@ -10,8 +10,10 @@ import ColVisibilityDropdown from '../Shared/ColVisibilityDropdown';
 import { CsvLinkBtn } from '../UI/CsvLinkBtn';
 import { addBranch, getBranch } from './BranchApis';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
+import { combineToSingleObject } from '../../utils/helpers';
 
 function CustomTable({ list }) {
+  console.log(combineToSingleObject(list));
   const [columnsToShow, setColumnsToShow] = useState([]);
 
   const columns = [
@@ -64,7 +66,7 @@ function CustomTable({ list }) {
           <div>
             <CsvLinkBtn>
               <CSVLink
-                data={list}
+                data={combineToSingleObject(list)}
                 className='btn btn-dark btn-sm mb-1'
                 filename='branch'
               >

@@ -71,6 +71,7 @@ import DetailBranch from './components/branch/DetailsBranch';
 import OfficeTimePolicy from './components/officeTimePolicy';
 import OfficeTimePolicyDetails from './components/officeTimePolicy/officeTimePolicyDetails';
 import MasterData from './components/reports/master-data';
+import AttendanceReport from './components/reports/AttendanceReport';
 
 function App() {
   return (
@@ -260,6 +261,11 @@ function App() {
                 path='/admin/reports/master-data'
                 exact
                 element={<MasterData />}
+              />
+              <Route
+                path='/admin/reports/attendance'
+                exact
+                element={<AttendanceReport />}
               />
             </Route>
             {/* === === === Transaction Routes === === === */}

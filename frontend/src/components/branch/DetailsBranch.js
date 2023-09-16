@@ -18,6 +18,7 @@ import ViewBtn from '../Buttons/ViewBtn';
 import moment from 'moment';
 import BranchEditPopup from '../UI/PopUp/BranchEditPopup';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
+import { combineToSingleObject } from '../../utils/helpers';
 
 //PopUp
 
@@ -92,7 +93,10 @@ const CustomTable = ({ list }) => {
         {list && (
           <div>
             <CsvLinkBtn>
-              <CSVLink data={list} filename='user_branch'>
+              <CSVLink
+                data={combineToSingleObject(list)}
+                filename='user_branch'
+              >
                 Download CSV
               </CSVLink>
             </CsvLinkBtn>

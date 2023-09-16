@@ -1,7 +1,7 @@
 import { Form, Input, Modal, TimePicker } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
-import { attendanceStatus } from '../../../utils/constant';
+import { attendanceStatus, leaveStatus } from '../../../utils/constant';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect } from 'react';
@@ -32,6 +32,20 @@ const AllStatus = [
     name: 'dayOff',
   },
 ];
+const AllLeaveStatus = [
+  {
+    id: 1,
+    name: 'paidLeave',
+  },
+  {
+    id: 2,
+    name: 'unpaidLeave',
+  },
+  {
+    id: 3,
+    name: 'halfDayLeave',
+  },
+];
 
 const EditAttendancePopup = ({
   isModalVisible,
@@ -47,6 +61,7 @@ const EditAttendancePopup = ({
   const { user, createdAt, status, inTime, outTime, comment } = userInfo;
 
   const [currentStatus, setCurrentStatus] = useState(status);
+  const [currentLeaveStatus, setCurrentLeaveStatus] = useState(status);
   const [currentComment, setCurrentComment] = useState(comment);
 
   const [inTimeDate, setInTimeDate] = useState({
@@ -111,32 +126,63 @@ const EditAttendancePopup = ({
       }}
     >
       <div>
-        <h1 className='text-[#333333] font-medium'>Attendance status</h1>
-        <div className='flex items-center mt-4 space-x-4'>
-          {AllStatus.map(item => {
-            return (
-              <button
-                onClick={() => {
-                  setCurrentStatus(item.name);
-                }}
-                key={item.id}
-                className='capitalize py-1.5 px-2 rounded'
-                style={{
-                  border: `1px solid ${attendanceStatus[item.name]}`,
-                  color:
-                    currentStatus === item.name
-                      ? '#fff'
-                      : ` ${attendanceStatus[item.name]}`,
-                  background:
-                    currentStatus === item.name
-                      ? ` ${attendanceStatus[item.name]}`
-                      : '#fff',
-                }}
-              >
-                {item.name.split(/(?=[A-Z][a-z0-9])/).join(' ')}
-              </button>
-            );
-          })}
+        <div>
+          <h1 className='text-[#333333] font-medium'>Attendance status</h1>
+          <div className='flex items-center mt-4 space-x-4'>
+            {AllStatus.map(item => {
+              return (
+                <button
+                  onClick={() => {
+                    setCurrentLeaveStatus(item.name);
+                  }}
+                  key={item.id}
+                  className='capitalize py-1.5 px-2 rounded'
+                  style={{
+                    border: `1px solid ${attendanceStatus[item.name]}`,
+                    color:
+                      currentLeaveStatus === item.name
+                        ? '#fff'
+                        : ` ${attendanceStatus[item.name]}`,
+                    background:
+                      currentLeaveStatus === item.name
+                        ? ` ${attendanceStatus[item.name]}`
+                        : '#fff',
+                  }}
+                >
+                  {item.name.split(/(?=[A-Z][a-z0-9])/).join(' ')}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <div>
+          <h1 className='text-[#333333] font-medium'>Leave status</h1>
+          <div className='flex items-center mt-4 space-x-4'>
+            {AllLeaveStatus.map(item => {
+              return (
+                <button
+                  onClick={() => {
+                    setCurrentStatus(item.name);
+                  }}
+                  key={item.id}
+                  className='capitalize py-1.5 px-2 rounded'
+                  style={{
+                    border: `1px solid ${leaveStatus[item.name]}`,
+                    color:
+                      currentStatus === item.name
+                        ? '#fff'
+                        : ` ${leaveStatus[item.name]}`,
+                    background:
+                      currentStatus === item.name
+                        ? ` ${leaveStatus[item.name]}`
+                        : '#fff',
+                  }}
+                >
+                  {item.name.split(/(?=[A-Z][a-z0-9])/).join(' ')}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
       <div>

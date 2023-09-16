@@ -6,6 +6,7 @@ import { CsvLinkBtn } from '../UI/CsvLinkBtn';
 import { CSVLink } from 'react-csv';
 import ViewBtn from '../Buttons/ViewBtn';
 import AttendBtn from '../Buttons/AttendBtn';
+import { combineToSingleObject } from '../../utils/helpers';
 
 const EmployeeTable = ({ list }) => {
   const [columnsToShow, setColumnsToShow] = useState([]);
@@ -115,7 +116,7 @@ const EmployeeTable = ({ list }) => {
             <div className='mt-0.5'>
               <CsvLinkBtn>
                 <CSVLink
-                  data={list}
+                  data={combineToSingleObject(list)}
                   className='btn btn-dark btn-sm'
                   style={{ marginTop: '5px' }}
                   filename='staffs'

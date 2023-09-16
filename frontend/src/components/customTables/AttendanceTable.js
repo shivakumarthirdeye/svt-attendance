@@ -1,47 +1,28 @@
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Link, Navigate } from 'react-router-dom';
-
-import { Card, DatePicker, Segmented, Table, Tag } from 'antd';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { CsvLinkBtn } from '../UI/CsvLinkBtn';
 import { CSVLink } from 'react-csv';
-import { useDispatch, useSelector } from 'react-redux';
 import ColVisibilityDropdown from '../Shared/ColVisibilityDropdown';
-
-import { CsvLinkBtn, TableHeraderh2 } from '../UI/CsvLinkBtn';
-import {
-  loadAllAttendancePaginated,
-  clearAttendanceList,
-} from '../../redux/rtk/features/attendance/attendanceSlice';
-import BtnSearchSvg from '../UI/Button/btnSearchSvg';
-import { VioletLinkBtn } from '../UI/AllLinkBtn';
-import BtnViewSvg from '../UI/Button/btnViewSvg';
-import { MdEdit } from 'react-icons/md';
-import AttendancePopup from '../UI/PopUp/AttendancePopup';
-import EditAttendancePopup from '../UI/PopUp/EditAttendancePopup';
+import { loadAllAttendancePaginated } from '../../redux/rtk/features/attendance/attendanceSlice';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import moment from 'moment';
+import { Table, Tag } from 'antd';
+import { useEffect } from 'react';
 import { attendanceStatus } from '../../utils/constant';
 import { combineToSingleObject } from '../../utils/helpers';
 
-//Date fucntinalities
-let startdate = moment().startOf('month');
-let enddate = moment().endOf('month');
-
-function CustomTable({ list, total, status, setStatus, loading }) {
+const AttendanceTable = ({
+  list,
+  total,
+  status,
+  setStatus,
+  loading,
+  startdate,
+  enddate,
+}) => {
   const [columnsToShow, setColumnsToShow] = useState([]);
 
   const dispatch = useDispatch();
-
-  const onChange = value => {
-    setStatus(value);
-    dispatch(
-      loadAllAttendancePaginated({
-        page: 1,
-        limit: 30,
-        startdate,
-        enddate,
-      })
-    );
-  };
 
   const columns = [
     {
@@ -144,25 +125,6 @@ function CustomTable({ list, total, status, setStatus, loading }) {
         );
       },
     },
-
-    {
-      id: 8,
-      title: 'Action',
-      dataIndex: 'id',
-      key: 'id',
-      render: (id, data) => {
-        return (
-          <button
-            onClick={() => {
-              setShowModal(prev => !prev);
-              setUserInfo(data);
-            }}
-          >
-            <MdEdit />
-          </button>
-        );
-      },
-    },
   ];
 
   useEffect(() => {
@@ -189,13 +151,6 @@ function CustomTable({ list, total, status, setStatus, loading }) {
 
   return (
     <div className='mt-5'>
-      {showModal && (
-        <EditAttendancePopup
-          isModalVisible={showModal}
-          userInfo={userInfo}
-          handleModalClose={handleModalClose}
-        />
-      )}
       {list && (
         <div className='text-center my-2 flex justify-end'>
           <CsvLinkBtn>
@@ -250,103 +205,17 @@ function CustomTable({ list, total, status, setStatus, loading }) {
           showSizeChanger: true,
           total: total ? total : 100,
 
-          onChange: (page, limit) => {
-            dispatch(
-              loadAllAttendancePaginated({ page, limit, startdate, enddate })
-            );
-          },
+          // onChange: (page, limit) => {
+          //   dispatch(
+          //     loadAllAttendancePaginated({ page, limit, startdate, enddate })
+          //   );
+          // },
         }}
         columns={columnsToShow}
         dataSource={list ? addKeys(list) : []}
       />
     </div>
   );
-}
-
-const GetAllAttendance = props => {
-  const dispatch = useDispatch();
-
-  const { list, loading } = useSelector(state => state.attendance);
-  const [status, setStatus] = useState('true');
-
-  // const [total, setTotal] = useState(0);
-
-  const { RangePicker } = DatePicker;
-
-  useEffect(() => {
-    dispatch(
-      loadAllAttendancePaginated({
-        page: 1,
-        limit: 30,
-        startdate,
-        enddate,
-      })
-    );
-  }, []);
-
-  const onCalendarChange = dates => {
-    if (!dates || !dates?.[0] || !dates?.[1]) return;
-
-    startdate = dates?.[0];
-
-    enddate = dates?.[1];
-  };
-
-  const onClickSearch = () => {
-    // dispatch(clearAttendanceList());
-
-    dispatch(
-      loadAllAttendancePaginated({
-        page: 1,
-        limit: 30,
-        startdate,
-        enddate,
-      })
-    );
-  };
-
-  // TODO : Add Search functionality here
-
-  const isLogged = Boolean(localStorage.getItem('isLogged'));
-
-  if (!isLogged) {
-    return <Navigate to={'/admin/auth/login'} replace={true} />;
-  }
-  return (
-    <>
-      <Card className='card card-custom mt-3 '>
-        <div className='card-body'>
-          <div className='flex justify-between'>
-            <TableHeraderh2>Attendance List</TableHeraderh2>
-            <div className='flex justify-end'>
-              <RangePicker
-                onCalendarChange={onCalendarChange}
-                defaultValue={[startdate, enddate]}
-                format={'DD-MM-YYYY'}
-                className='range-picker mr-3'
-                style={{ maxWidth: '400px' }}
-              />
-              <VioletLinkBtn>
-                <button onClick={onClickSearch}>
-                  <BtnSearchSvg size={25} title={'SEARCH'} loading={loading} />
-                </button>
-              </VioletLinkBtn>
-            </div>
-          </div>
-          {/*TODO : ADD TOTAL AMOUNT HERE */}
-          <CustomTable
-            list={list}
-            loading={loading}
-            total={100}
-            startdate={startdate}
-            enddate={enddate}
-            status={status}
-            setStatus={setStatus}
-          />
-        </div>
-      </Card>
-    </>
-  );
 };
 
-export default GetAllAttendance;
+export default AttendanceTable;

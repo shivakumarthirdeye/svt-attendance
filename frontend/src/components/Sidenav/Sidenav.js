@@ -394,6 +394,15 @@ const Sidenav = ({ color, sideNavOpenKeys }) => {
           key: 'masterData',
           icon: <FileDoneOutlined />,
         },
+        hasPermission('read-account') && {
+          label: (
+            <NavLink to='/admin/reports/attendance'>
+              <span>Attendance</span>
+            </NavLink>
+          ),
+          key: 'attendance',
+          icon: <FileDoneOutlined />,
+        },
       ],
     },
 

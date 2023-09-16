@@ -16,6 +16,7 @@ import { loadSingelEmploymentStatus } from '../../redux/rtk/features/employemntS
 import EmploymentStatusEditPopup from '../UI/PopUp/EmploymentStatusEditPopup';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
 import { getSingleOfficeTimePolicy } from './officeTimePolicyApis';
+import { combineToSingleObject } from '../../utils/helpers';
 
 //PopUp
 
@@ -90,7 +91,10 @@ const CustomTable = ({ list }) => {
         {list && (
           <div>
             <CsvLinkBtn>
-              <CSVLink data={list} filename='user_branch'>
+              <CSVLink
+                data={combineToSingleObject(list)}
+                filename='user_branch'
+              >
                 Download CSV
               </CSVLink>
             </CsvLinkBtn>

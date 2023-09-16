@@ -17,6 +17,7 @@ import moment from 'moment';
 import BtnViewSvg from '../UI/Button/btnViewSvg';
 import ViewBtn from '../Buttons/ViewBtn';
 import UserPrivateComponent from '../PrivateRoutes/UserPrivateComponent';
+import { combineToSingleObject } from '../../utils/helpers';
 
 function CustomTable({ list, total }) {
   const dispatch = useDispatch();
@@ -143,7 +144,7 @@ function CustomTable({ list, total }) {
             <div className='mt-0.5'>
               <CsvLinkBtn>
                 <CSVLink
-                  data={list}
+                  data={combineToSingleObject(list)}
                   className='btn btn-dark btn-sm'
                   style={{ marginTop: '5px' }}
                   filename='leave_applications'

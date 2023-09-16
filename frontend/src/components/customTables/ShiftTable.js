@@ -5,6 +5,7 @@ import { Card, Table } from 'antd';
 import { CsvLinkBtn } from '../UI/CsvLinkBtn';
 import { CSVLink } from 'react-csv';
 import ViewBtn from '../Buttons/ViewBtn';
+import { combineToSingleObject } from '../../utils/helpers';
 
 const ShiftTable = ({ list }) => {
   const [columnsToShow, setColumnsToShow] = useState([]);
@@ -67,7 +68,7 @@ const ShiftTable = ({ list }) => {
           <div>
             <CsvLinkBtn>
               <CSVLink
-                data={list}
+                data={combineToSingleObject(list)}
                 className='btn btn-dark btn-sm mb-1'
                 filename='shift'
               >

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import ViewBtn from '../Buttons/ViewBtn';
+import { combineToSingleObject } from '../../utils/helpers';
 
 const DesignationTable = ({ list, loading }) => {
   const [columnsToShow, setColumnsToShow] = useState([]);
@@ -52,7 +53,7 @@ const DesignationTable = ({ list, loading }) => {
           <div>
             <CsvLinkBtn>
               <CSVLink
-                data={list}
+                data={combineToSingleObject(list)}
                 className='btn btn-dark btn-sm mb-1'
                 filename='designation'
               >
