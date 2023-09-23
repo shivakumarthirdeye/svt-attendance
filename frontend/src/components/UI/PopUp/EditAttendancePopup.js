@@ -79,7 +79,7 @@ const EditAttendancePopup = ({
 
     const FormData = {
       ...userInfo,
-      status: currentStatus,
+      status: currentLeaveStatus,
       inTime: inTimeDateNew == 'Invalid Date' ? null : inTimeDateNew,
       outTime: outTimeDateNew == 'Invalid Date' ? null : outTimeDateNew,
       comment: currentComment,
@@ -243,7 +243,7 @@ const EditAttendancePopup = ({
                 defaultValue={dayjs(outTimeDate.time, 'HH:mm:ss')}
                 format={'HH:mm:s'}
                 onChange={(time, timeString) =>
-                  setInTimeDate({ ...outTimeDate, time: timeString })
+                  setOutTimeDate({ ...outTimeDate, time: timeString })
                 }
               />
             </Form.Item>

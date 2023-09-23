@@ -165,7 +165,7 @@ function Main({ children }) {
             )}
 
           <Content>{children}</Content>
-          <Footer />
+          {/* <Footer /> */}
         </Layout>
       </Layout>
     );

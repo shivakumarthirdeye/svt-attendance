@@ -9,3 +9,13 @@ export const leaveStatus = {
   unpaidLeave: '#5296D5',
   halfDayLeave: '#294F83',
 };
+
+export const allColors = {
+  present: '#55B938',
+  absent: '#D65745',
+  halfDay: '#EAC645',
+  dayOff: '#999999',
+  paidLeave: '#294F83',
+  unpaidLeave: '#5296D5',
+  halfDayLeave: '#294F83',
+};

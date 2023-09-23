@@ -19,7 +19,7 @@ import BtnViewSvg from '../UI/Button/btnViewSvg';
 import { MdEdit } from 'react-icons/md';
 import AttendancePopup from '../UI/PopUp/AttendancePopup';
 import EditAttendancePopup from '../UI/PopUp/EditAttendancePopup';
-import { attendanceStatus } from '../../utils/constant';
+import { allColors, attendanceStatus } from '../../utils/constant';
 import { combineToSingleObject } from '../../utils/helpers';
 
 //Date fucntinalities
@@ -334,6 +334,76 @@ const GetAllAttendance = props => {
             </div>
           </div>
           {/*TODO : ADD TOTAL AMOUNT HERE */}
+          <div className='flex flex-wrap gap-5 my-5 '>
+            {[
+              {
+                id: 1,
+                name: 'present',
+                count: 10,
+              },
+              {
+                id: 2,
+                name: 'absent',
+                count: 5,
+              },
+              {
+                id: 3,
+                name: 'halfDay',
+                count: 1,
+              },
+              {
+                id: 4,
+                name: 'dayOff',
+                count: 8,
+              },
+              {
+                id: 5,
+                name: 'paidLeave',
+                count: 2,
+              },
+              {
+                id: 6,
+                name: 'unpaidLeave',
+                count: 11,
+              },
+              {
+                id: 7,
+                name: 'halfDayLeave',
+                count: 10,
+              },
+            ].map(item => {
+              return (
+                <div
+                  key={item.id}
+                  className='bg-[#f2f2f2] min-w-[150px]  max-w-[180px] flex-1 rounded-2xl px-4 flex flex-col items-center justify-center py-6'
+                >
+                  <h1 className='text-3xl font-bold'>{item.count}</h1>
+                  <div className='mt-2  flex items-center gap-2'>
+                    <div
+                      className='w-fit rounded-full'
+                      style={{
+                        border: `1px solid ${allColors[item.name]}`,
+                      }}
+                    >
+                      <div
+                        className='w-4 h-4 rounded-full'
+                        style={{
+                          background: `${allColors[item.name]}`,
+                          border: `2.5px solid #fff`,
+                        }}
+                      ></div>
+                    </div>
+                    <div>
+                      <p className='capitalize text-lg '>
+                        {' '}
+                        {item.name.split(/(?=[A-Z][a-z0-9])/).join(' ')}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           <CustomTable
             list={list}
             loading={loading}
